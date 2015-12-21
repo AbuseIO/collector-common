@@ -40,28 +40,4 @@ class Factory
         }
         return $collectors;
     }
-
-    /**
-     * Create and return a Collector class and it's configuration
-     * @param  string $name
-     * @return class
-     */
-    public static function create($name)
-    {
-        /**
-         * Loop through the collector list and try to find a match by name.
-         */
-        $collectors = Factory::getCollectors();
-        foreach ($collectors as $collectorName) {
-            $collectorClass = 'AbuseIO\\Collectors\\' . $collectorName;
-
-            // Collector name matches, return it.
-            if ($name == $collectorName) {
-                return new $collectorClass();
-            }
-        }
-
-        // No valid collector found
-        return false;
-    }
 }

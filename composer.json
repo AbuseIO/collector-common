@@ -1,0 +1,32 @@
+{
+    "name": "abuseio/collector-common",
+    "description": "Collector common helper package",
+    "version": "1.0.0-dev",
+    "keywords": ["laravel", "abuseio", "collector"],
+    "homepage": "http://abuse.io",
+    "type": "library",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "AbuseIO Foundation",
+            "email": "dev@abuse.io",
+            "homepage": "http://abuse.io",
+            "role": "Lead"
+        }
+    ],
+    "support": {
+        "email": "dev@abuse.io",
+        "issues": "https://github.com/AbuseIO/collector-common/issues",
+        "irc": "irc://irc.freenode.net/abuseio",
+        "source": "https://github.com/AbuseIO/collector-common",
+        "docs": "https://abuse.io/resources/documentation/"
+    },
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "AbuseIO\\Collector\\Factory\\": "src/"
+        }
+    }
+}

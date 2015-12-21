@@ -1,2 +1,3 @@
 # collector-common
-AbuseIO collector common package
+
+This is the helper package that is required for all collectors

@@ -218,7 +218,9 @@ class Collector
      */
     protected function applyFilters($report, $removeEmpty = true)
     {
-        if (is_array("{$this->configBase}.feeds.{$this->feedName}.filters")) {
+        if ((!empty(config("{$this->configBase}.feeds.{$this->feedName}.filters"))) &&
+            (is_array(config("{$this->configBase}.feeds.{$this->feedName}.filters")))
+        ) {
             $filter_columns = array_filter(config("{$this->configBase}.feeds.{$this->feedName}.filters"));
             foreach ($filter_columns as $column) {
                 if (!empty($report[$column])) {

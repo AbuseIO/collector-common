@@ -2,10 +2,15 @@
 
 namespace AbuseIO\Collectors;
 
+use Illuminate\Filesystem\Filesystem;
+use ReflectionClass;
+use Uuid;
+use Log;
+
 class Collector
 {
     /**
-     * Configuration Basename (parser name)
+     * Configuration Basename (collector name)
      * @var String
      */
     public $configBase;
@@ -23,14 +28,14 @@ class Collector
     public $tempPath;
 
     /**
-     * Contains the name of the currently used feed within the parser
+     * Contains the name of the currently used feed within the collector
      * @var String
      */
     public $feedName;
 
     /**
      * Contains an array of found events that need to be handled
-     * @var Array
+     * @var array
      */
     public $events = [ ];
 
@@ -42,16 +47,41 @@ class Collector
 
     /**
      * Create a new Collector instance
+     *
+     * @param  object $collector
      */
-    public function __construct()
+    public function __construct($collector)
     {
-        //
+        $this->startup($collector);
+    }
+
+    /**
+     * Generalize the local config based on the collector class object
+     *
+     * @param  object $collector
+     * @return void
+     */
+    protected function startup($collector)
+    {
+        $reflect = new ReflectionClass($collector);
+
+        $this->configBase = 'collectors.' . $reflect->getShortName();
+
+        if (empty(config("{$this->configBase}.collector.name"))) {
+            $this->failed("Required collector.name is missing in collector configuration");
+        }
+
+        Log::info(
+            '(JOB ' . getmypid() . ') ' . get_class($this) . ': ' .
+            'Collector startup initiated for collector : ' . config("{$this->configBase}.collector.name")
+        );
+
     }
 
     /**
      * Return failed
-     * @param  String $message
-     * @return Array
+     * @param  string $message
+     * @return array
      */
     protected function failed($message)
     {
@@ -67,7 +97,7 @@ class Collector
 
     /**
      * Return success
-     * @return Array
+     * @return array
      */
     protected function success()
     {
@@ -75,21 +105,21 @@ class Collector
 
         if (empty($this->events)) {
             Log::warning(
-                'The parser ' . config("{$this->configBase}.parser.name") . ' did not return any events which ' .
-                'should be investigated for parser and/or configuration errors'
+                'The collector ' . config("{$this->configBase}.collector.name") . ' did not return any events which ' .
+                'should be investigated for collector and/or configuration errors'
             );
         }
 
         return [
             'errorStatus'   => false,
-            'errorMessage'  => 'Data sucessfully parsed',
+            'errorMessage'  => 'Data successfully collected',
             'warningCount'  => $this->warningCount,
             'data'          => $this->events,
         ];
     }
 
     /**
-     * Cleanup anything a parser might have left (basically, remove the working dir)
+     * Cleanup anything a collector might have left (basically, remove the working dir)
      * @return void
      */
     protected function cleanup()
@@ -103,7 +133,7 @@ class Collector
     }
 
     /**
-     * Setup a working directory for the parser
+     * Setup a working directory for the collector
      * @return Boolean Returns true or call $this->failed()
      */
     protected function createWorkingDir()
@@ -120,7 +150,7 @@ class Collector
     }
 
     /**
-     * Check if the feed specified is known in the parser config.
+     * Check if the feed specified is known in the collector config.
      * @return Boolean Returns true or false
      */
     protected function isKnownFeed()
@@ -128,8 +158,8 @@ class Collector
         if (empty(config("{$this->configBase}.feeds.{$this->feedName}"))) {
             $this->warningCount++;
             Log::warning(
-                "The feed referred as '{$this->feedName}' is not configured in the parser " .
-                config("{$this->configBase}.parser.name") .
+                "The feed referred as '{$this->feedName}' is not configured in the collector " .
+                config("{$this->configBase}.collector.name") .
                 ' therefore skipping processing of this e-mail'
             );
             return false;
@@ -146,8 +176,8 @@ class Collector
     {
         if (config("{$this->configBase}.feeds.{$this->feedName}.enabled") !== true) {
             Log::warning(
-                "The feed '{$this->feedName}' is disabled in the configuration of parser " .
-                config("{$this->configBase}.parser.name") .
+                "The feed '{$this->feedName}' is disabled in the configuration of collector " .
+                config("{$this->configBase}.collector.name") .
                 ' therefore skipping processing of this e-mail'
             );
         }
@@ -156,8 +186,8 @@ class Collector
 
     /**
      * Check if all required fields are in the report.
-     * @param  Array   $report Report data
-     * @return Boolean         Returns true or false
+     * @param  array   $report Report data
+     * @return boolean         Returns true or false
      */
     protected function hasRequiredFields($report)
     {
@@ -167,7 +197,7 @@ class Collector
                 foreach ($columns as $column) {
                     if (!isset($report[$column])) {
                         Log::warning(
-                            config("{$this->configBase}.parser.name") . " feed '{$this->feedName}' " .
+                            config("{$this->configBase}.collector.name") . " feed '{$this->feedName}' " .
                             "says $column is required but is missing, therefore skipping processing of this e-event"
                         );
                         $this->warningCount++;
@@ -182,9 +212,9 @@ class Collector
 
     /**
      * Filter the unwanted and empty fields from the report.
-     * @param  Array   $report      The report that needs filtering base on config elements
-     * @param  Boolean $removeEmpty Option to remove empty fields from report, default is true
-     * @return Array   $report      The filtered version of the report
+     * @param  array   $report      The report that needs filtering base on config elements
+     * @param  boolean $removeEmpty Option to remove empty fields from report, default is true
+     * @return array   $report      The filtered version of the report
      */
     protected function applyFilters($report, $removeEmpty = true)
     {

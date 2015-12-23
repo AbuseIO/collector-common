@@ -24,11 +24,12 @@ class Factory
         $collectorClassList = ClassMapGenerator::createMap(base_path().'/vendor/abuseio');
         $collectorClassListFiltered = array_where(
             array_keys($collectorClassList),
-            function ($key, $value) {
+            function (/** @noinspection PhpUnusedParameterInspection */ $key, $value) {
                 // Get all collectors, ignore all other packages.
                 if (strpos($value, 'AbuseIO\Collectors\\') !== false) {
                     return $value;
                 }
+                return false;
             }
         );
 
@@ -43,8 +44,9 @@ class Factory
     }
 
     /**
-     * Create and return a Collector class and it's configuration
-     * @return class
+     * Create and return a Collector object and it's configuration
+     * @param string $requiredName
+     * @return object
      */
     public static function create($requiredName)
     {
@@ -74,7 +76,7 @@ class Factory
         // No valid collectors found
         Log::info(
             '(JOB ' . getmypid() . ') \AbuseIO\Collectors\Factory: ' .
-            "The collector {$collectorName} is not present on this system"
+            "The collector {$requiredName} is not present on this system"
         );
         return false;
     }

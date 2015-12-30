@@ -5,6 +5,10 @@ namespace AbuseIO\Collectors;
 use Symfony\Component\ClassLoader\ClassMapGenerator;
 use Log;
 
+/**
+ * Class Factory
+ * @package AbuseIO\Collectors
+ */
 class Factory
 {
     /**
@@ -17,11 +21,13 @@ class Factory
 
     /**
      * Get a list of installed AbuseIO collectors and return as an array
+     *
      * @return array
      */
     public static function getCollectors()
     {
         $collectorClassList = ClassMapGenerator::createMap(base_path().'/vendor/abuseio');
+        /** @noinspection PhpUnusedParameterInspection */
         $collectorClassListFiltered = array_where(
             array_keys($collectorClassList),
             function ($key, $value) {
@@ -45,6 +51,7 @@ class Factory
 
     /**
      * Create and return a Collector object and it's configuration
+     *
      * @param string $requiredName
      * @return object
      */

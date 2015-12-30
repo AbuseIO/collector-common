@@ -7,6 +7,10 @@ use ReflectionClass;
 use Uuid;
 use Log;
 
+/**
+ * Class Collector
+ * @package AbuseIO\Collectors
+ */
 class Collector
 {
     /**

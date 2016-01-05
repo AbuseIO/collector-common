@@ -91,6 +91,11 @@ class Collector
     {
         $this->cleanup();
 
+        Log::warning(
+            '(JOB ' . getmypid() . ') ' . get_class($this) . ': ' .
+            'Collector ' . config("{$this->configBase}.collector.name") . ' has ended with errors. ' . $message
+        );
+
         return [
             'errorStatus'   => true,
             'errorMessage'  => $message,
@@ -113,6 +118,11 @@ class Collector
                 'should be investigated for collector and/or configuration errors'
             );
         }
+
+        Log::info(
+            '(JOB ' . getmypid() . ') ' . get_class($this) . ': ' .
+            'Collector run completed for collector : ' . config("{$this->configBase}.collector.name")
+        );
 
         return [
             'errorStatus'   => false,

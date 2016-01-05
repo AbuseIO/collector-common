@@ -73,7 +73,7 @@ class Factory
 
                 } else {
                     Log::info(
-                        '(JOB ' . getmypid() . ') \AbuseIO\Collectors\Factory: ' .
+                        'AbuseIO\Collectors\Factory: ' .
                         "The collector {$collectorName} has been disabled and will not be used."
                     );
                 }
@@ -82,7 +82,7 @@ class Factory
 
         // No valid collectors found
         Log::info(
-            '(JOB ' . getmypid() . ') \AbuseIO\Collectors\Factory: ' .
+            'AbuseIO\Collectors\Factory: ' .
             "The collector {$requiredName} is not present on this system"
         );
         return false;

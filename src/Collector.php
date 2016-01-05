@@ -76,7 +76,7 @@ class Collector
         }
 
         Log::info(
-            '(JOB ' . getmypid() . ') ' . get_class($this) . ': ' .
+            get_class($this) . ': ' .
             'Collector startup initiated for collector : ' . config("{$this->configBase}.collector.name")
         );
 
@@ -92,7 +92,7 @@ class Collector
         $this->cleanup();
 
         Log::warning(
-            '(JOB ' . getmypid() . ') ' . get_class($this) . ': ' .
+            get_class($this) . ': ' .
             'Collector ' . config("{$this->configBase}.collector.name") . ' has ended with errors. ' . $message
         );
 
@@ -120,7 +120,7 @@ class Collector
         }
 
         Log::info(
-            '(JOB ' . getmypid() . ') ' . get_class($this) . ': ' .
+            get_class($this) . ': ' .
             'Collector run completed for collector : ' . config("{$this->configBase}.collector.name")
         );
 

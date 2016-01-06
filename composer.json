@@ -1,7 +1,7 @@
 {
     "name": "abuseio/collector-common",
     "description": "Collector common helper package",
-    "version": "1.1.0",
+    "version": "1.1.1-dev",
     "keywords": ["laravel", "abuseio", "collector"],
     "homepage": "http://abuse.io",
     "type": "library",

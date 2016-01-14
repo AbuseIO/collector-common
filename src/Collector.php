@@ -38,10 +38,10 @@ class Collector
     public $feedName;
 
     /**
-     * Contains an array of found events that need to be handled
+     * Contains an array of found incidents that need to be handled
      * @var array
      */
-    public $events = [ ];
+    public $incidents = [ ];
 
     /**
      * Warning counter
@@ -112,10 +112,10 @@ class Collector
     {
         $this->cleanup();
 
-        if (empty($this->events)) {
+        if (empty($this->incidents)) {
             Log::warning(
-                'The collector ' . config("{$this->configBase}.collector.name") . ' did not return any events which ' .
-                'should be investigated for collector and/or configuration errors'
+                'The collector ' . config("{$this->configBase}.collector.name") . ' did not return any incidents ' .
+                'which should be investigated for collector and/or configuration errors'
             );
         }
 
@@ -128,7 +128,7 @@ class Collector
             'errorStatus'   => false,
             'errorMessage'  => 'Data successfully collected',
             'warningCount'  => $this->warningCount,
-            'data'          => $this->events,
+            'data'          => $this->incidents,
         ];
     }
 
@@ -212,7 +212,7 @@ class Collector
                     if (!isset($report[$column])) {
                         Log::warning(
                             config("{$this->configBase}.collector.name") . " feed '{$this->feedName}' " .
-                            "says $column is required but is missing, therefore skipping processing of this e-event"
+                            "says $column is required but is missing, therefore skipping processing of this incidents"
                         );
                         $this->warningCount++;
                         return false;

@@ -1,7 +1,7 @@
 {
     "name": "abuseio/collector-common",
     "description": "Collector common helper package",
-    "version": "1.1.2",
+    "version": "1.2.1",
     "keywords": ["laravel", "abuseio", "collector"],
     "homepage": "http://abuse.io",
     "type": "library",
@@ -22,7 +22,8 @@
         "docs": "https://abuse.io/resources/documentation/"
     },
     "require": {
-        "php": ">=5.5.9"
+        "php": ">=5.5.9",
+        "laravel/framework": ">=5.3"
     },
     "autoload": {
         "psr-4": {

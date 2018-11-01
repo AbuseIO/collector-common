@@ -30,7 +30,7 @@ class Factory
         /** @noinspection PhpUnusedParameterInspection */
         $collectorClassListFiltered = array_where(
             array_keys($collectorClassList),
-            function ($key, $value) {
+            function ($value, $key) {
                 // Get all collectors, ignore all other packages.
                 if (strpos($value, 'AbuseIO\Collectors\\') !== false) {
                     return $value;

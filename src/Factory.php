@@ -41,7 +41,7 @@ class Factory
         );
 
         $collectors = [];
-        $collectorList = Arr::map('class_basename', $collectorClassListFiltered);
+        $collectorList = array_map('class_basename', $collectorClassListFiltered);
         foreach ($collectorList as $collector) {
             if (!in_array($collector, ['Factory', 'Collector'])) {
                 $collectors[] = $collector;

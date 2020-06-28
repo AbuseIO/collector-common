@@ -3,6 +3,7 @@
 namespace AbuseIO\Collectors;
 
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
 use ReflectionClass;
 use Uuid;
 use Log;
@@ -206,7 +207,7 @@ class Collector
     protected function hasRequiredFields($report)
     {
         if (is_array(config("{$this->configBase}.feeds.{$this->feedName}.fields"))) {
-            $columns = array_filter(config("{$this->configBase}.feeds.{$this->feedName}.fields"));
+            $columns = Arr::filter(config("{$this->configBase}.feeds.{$this->feedName}.fields"));
             if (count($columns) > 0) {
                 foreach ($columns as $column) {
                     if (!isset($report[$column])) {
@@ -235,7 +236,7 @@ class Collector
         if ((!empty(config("{$this->configBase}.feeds.{$this->feedName}.filters"))) &&
             (is_array(config("{$this->configBase}.feeds.{$this->feedName}.filters")))
         ) {
-            $filter_columns = array_filter(config("{$this->configBase}.feeds.{$this->feedName}.filters"));
+            $filter_columns = Arr::filter(config("{$this->configBase}.feeds.{$this->feedName}.filters"));
             foreach ($filter_columns as $column) {
                 if (!empty($report[$column])) {
                     unset($report[$column]);

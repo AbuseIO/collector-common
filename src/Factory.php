@@ -3,6 +3,7 @@
 namespace AbuseIO\Collectors;
 
 use Composer\Autoload\ClassMapGenerator;
+use Illuminate\Support\Arr;
 use Log;
 
 /**
@@ -28,8 +29,8 @@ class Factory
     {
         $collectorClassList = ClassMapGenerator::createMap(base_path().'/vendor/abuseio');
         /** @noinspection PhpUnusedParameterInspection */
-        $collectorClassListFiltered = array_where(
-            array_keys($collectorClassList),
+        $collectorClassListFiltered = Arr::where(
+            Arr::keys($collectorClassList),
             function ($value, $key) {
                 // Get all collectors, ignore all other packages.
                 if (strpos($value, 'AbuseIO\Collectors\\') !== false) {
@@ -40,7 +41,7 @@ class Factory
         );
 
         $collectors = [];
-        $collectorList = array_map('class_basename', $collectorClassListFiltered);
+        $collectorList = Arr::map('class_basename', $collectorClassListFiltered);
         foreach ($collectorList as $collector) {
             if (!in_array($collector, ['Factory', 'Collector'])) {
                 $collectors[] = $collector;

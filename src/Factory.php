@@ -30,7 +30,7 @@ class Factory
         $collectorClassList = ClassMapGenerator::createMap(base_path().'/vendor/abuseio');
         /** @noinspection PhpUnusedParameterInspection */
         $collectorClassListFiltered = Arr::where(
-            Arr::keys($collectorClassList),
+            array_keys($collectorClassList),
             function ($value, $key) {
                 // Get all collectors, ignore all other packages.
                 if (strpos($value, 'AbuseIO\Collectors\\') !== false) {
